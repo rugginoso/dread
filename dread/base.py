@@ -76,7 +76,7 @@ class BaseDispatcher(object):
         adapter = self.url_map.bind_to_environ(request.environ)
         endpoint, params = adapter.match()
 
-        params.update(data=request.deserialized_data)
+        params.update(data=request.data)
         params.update(request.args)
 
         return endpoint(params)

@@ -12,12 +12,13 @@ from .base import BaseDispatcher
 class JSONRequest(Request):
 
     @cached_property
-    def deserialized_data(self):
-        if self.data:
+    def data(self):
+        data = super(JSONRequest, self).data
+        if data:
             if 'json' not in self.environ.get('CONTENT_TYPE', ''):
                 raise BadRequest('Not a JSON request')
             try:
-                return json.loads(self.data)
+                return json.loads(data)
             except Exception:
                 raise BadRequest('Unable to read JSON request')
 
