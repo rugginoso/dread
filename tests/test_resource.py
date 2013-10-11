@@ -20,10 +20,10 @@ class TestRuleGeneration(unittest.TestCase):
 
         rules = list(self.resource.get_rules(None))
 
-        assert len(rules) == 1
-        assert rules[0].rule == '/baseresource/'
-        assert rules[0].endpoint == self.endpoint
-        assert rules[0].methods == {'GET', 'HEAD'}
+        self.assertEqual(len(rules), 1)
+        self.assertEqual(rules[0].rule, '/baseresource/')
+        self.assertEqual(rules[0].endpoint, self.endpoint)
+        self.assertEqual(rules[0].methods, {'GET', 'HEAD'})
 
 
     def test_create(self):
@@ -31,10 +31,10 @@ class TestRuleGeneration(unittest.TestCase):
 
         rules = list(self.resource.get_rules(None))
 
-        assert len(rules) == 1
-        assert rules[0].rule == '/baseresource/'
-        assert rules[0].endpoint == self.endpoint
-        assert rules[0].methods == {'POST'}
+        self.assertEqual(len(rules), 1)
+        self.assertEqual(rules[0].rule, '/baseresource/')
+        self.assertEqual(rules[0].endpoint, self.endpoint)
+        self.assertEqual(rules[0].methods, {'POST'})
 
 
     def test_detail(self):
@@ -42,10 +42,10 @@ class TestRuleGeneration(unittest.TestCase):
 
         rules = list(self.resource.get_rules(None))
 
-        assert len(rules) == 1
-        assert rules[0].rule == '/baseresource/<int:baseresource_id>'
-        assert rules[0].endpoint == self.endpoint
-        assert rules[0].methods == {'GET', 'HEAD'}
+        self.assertEqual(len(rules), 1)
+        self.assertEqual(rules[0].rule, '/baseresource/<int:baseresource_id>')
+        self.assertEqual(rules[0].endpoint, self.endpoint)
+        self.assertEqual(rules[0].methods, {'GET', 'HEAD'})
 
 
     def test_update(self):
@@ -53,10 +53,10 @@ class TestRuleGeneration(unittest.TestCase):
 
         rules = list(self.resource.get_rules(None))
 
-        assert len(rules) == 1
-        assert rules[0].rule == '/baseresource/<int:baseresource_id>'
-        assert rules[0].endpoint == self.endpoint
-        assert rules[0].methods == {'PUT'}
+        self.assertEqual(len(rules), 1)
+        self.assertEqual(rules[0].rule, '/baseresource/<int:baseresource_id>')
+        self.assertEqual(rules[0].endpoint, self.endpoint)
+        self.assertEqual(rules[0].methods, {'PUT'})
 
 
     def test_delete(self):
@@ -64,10 +64,10 @@ class TestRuleGeneration(unittest.TestCase):
 
         rules = list(self.resource.get_rules(None))
 
-        assert len(rules) == 1
-        assert rules[0].rule == '/baseresource/<int:baseresource_id>'
-        assert rules[0].endpoint == self.endpoint
-        assert rules[0].methods == {'DELETE'}
+        self.assertEqual(len(rules), 1)
+        self.assertEqual(rules[0].rule, '/baseresource/<int:baseresource_id>')
+        self.assertEqual(rules[0].endpoint, self.endpoint)
+        self.assertEqual(rules[0].methods, {'DELETE'})
 
 
 if __name__ == '__main__':
