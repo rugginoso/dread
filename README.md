@@ -13,6 +13,12 @@ Overview
 DREAD is a web microframework based on [Werkzeug](https://github.com/mitsuhiko/werkzeug) explicitely wrote to implement REST services.
 It support high level resource action definition and nested resources.
 
+Installation
+============
+```
+$ pip install dread
+```
+
 Example
 =======
 ```python
