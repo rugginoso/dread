@@ -21,7 +21,7 @@ def dependencies():
 
 
 setup(name='dread',
-      version='0.1.0',
+      version='0.2.0',
       description='REST microframework',
       long_description=__doc__,
       platforms = 'any',
