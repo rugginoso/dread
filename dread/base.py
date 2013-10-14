@@ -1,5 +1,5 @@
 from werkzeug.routing import Map, Rule, Submount
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import HTTPException, Unauthorized
 
 from collections import namedtuple
 
@@ -30,6 +30,8 @@ class BaseResource(object):
         ),
     }
 
+    PROTECTED_ACTIONS = []
+
     def __init__(self, name=None, param_name=None, param_type=None):
         self.name = name or self.__class__.__name__.lower()
         self.param_name = param_name or ('%s_id' % self.name)
@@ -42,6 +44,12 @@ class BaseResource(object):
             except AttributeError:
                 continue
 
+            # In python3 this will work as well:
+            # setattr(endpoint, 'requires_auth', \
+            #     action_name in self.PROTECTED_ACTIONS)
+            endpoint.__dict__['requires_auth'] = \
+                (action_name in self.PROTECTED_ACTIONS)
+
             action = self.ACTIONS[action_name]
             yield Rule(
                 action.path_tpl.format(**(self.__dict__)),
@@ -53,6 +61,8 @@ class BaseResource(object):
 class BaseDispatcher(object):
     request_class = None
     response_class = None
+
+    auth_class = None
 
     def __init__(self):
         self.url_map = Map()
@@ -79,6 +89,9 @@ class BaseDispatcher(object):
         params.update(data=request.data)
         params.update(request.args)
 
+        if endpoint.requires_auth:
+            endpoint = self.auth_class(endpoint)
+
         return endpoint(params)
 
     def __call__(self, environ, start_response):
@@ -99,3 +112,17 @@ class BaseDispatcher(object):
             use_debugger=use_debugger,
             use_reloader=use_reloader
         )
+
+
+class BaseAuth(object):
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
+
+    def __call__(self, params):
+        if self.authorize(params):
+            return self.endpoint(params)
+        else:
+            raise Unauthorized()
+
+    def authorize(self, params):
+        raise NotImplementedError
