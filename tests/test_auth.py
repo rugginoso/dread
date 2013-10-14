@@ -9,7 +9,7 @@ from dread.base import BaseDispatcher, BaseResource, BaseAuth
 
 
 class TestAuth(BaseAuth):
-    def authorize(self, params):
+    def authenticate(self, params):
         return params.get('username') == ['admin'] and \
             params.get('password') == ['admin']
 

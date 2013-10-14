@@ -119,10 +119,10 @@ class BaseAuth(object):
         self.endpoint = endpoint
 
     def __call__(self, params):
-        if self.authorize(params):
+        if self.authenticate(params):
             return self.endpoint(params)
         else:
             raise Unauthorized()
 
-    def authorize(self, params):
+    def authenticate(self, params):
         raise NotImplementedError
