@@ -2,10 +2,12 @@ import sys
 sys.path.append('..')
 
 import unittest
+from base64 import standard_b64encode
 from werkzeug.test import Client
 from werkzeug.wrappers import Request, Response
 
 from dread.base import BaseDispatcher, BaseResource, BaseAuth
+from dread.auth import BasicAuth
 
 
 class TestAuth(BaseAuth):
@@ -49,6 +51,37 @@ class TestProtectedAction(unittest.TestCase):
 
     def test_unprotected_action(self):
         resp = self.client.get('/testresource/')
+        self.assertEqual(resp.status_code, 200)
+
+
+class TestAuth(BasicAuth):
+    def check_credientials(self, username, password):
+        return username == 'admin' and password == 'admin'
+
+
+class BasicAuthDispatcher(BaseDispatcher):
+    request_class = Request
+    response_class = Response
+    auth_class = TestAuth
+
+
+class TestBasicAuth(unittest.TestCase):
+    def setUp(self):
+        self.dispatcher = BasicAuthDispatcher()
+        self.dispatcher.add_resource(TestResource())
+
+        self.client = Client(self.dispatcher, Response)
+
+    def test_protected_action_unauthorized(self):
+        resp = self.client.get('/testresource/1')
+        self.assertTrue('www-authenticate' in resp.headers)
+
+    def test_protected_action_authorized(self):
+        headers = [
+            ('Authorization', 'Basic %s' % standard_b64encode('admin:admin'))
+        ]
+
+        resp = self.client.get('/testresource/1', headers=headers)
         self.assertEqual(resp.status_code, 200)
 
 
