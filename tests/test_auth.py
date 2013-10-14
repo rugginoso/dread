@@ -1,6 +1,3 @@
-import sys
-sys.path.append('..')
-
 import unittest
 from base64 import standard_b64encode
 from werkzeug.test import Client

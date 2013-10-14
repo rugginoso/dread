@@ -1,6 +1,3 @@
-import sys
-sys.path.append('..')
-
 import unittest
 from werkzeug.test import EnvironBuilder
 from werkzeug.exceptions import BadRequest

@@ -42,4 +42,5 @@ setup(name='dread',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules',
-      ])
+      ],
+      test_suite='tests')
