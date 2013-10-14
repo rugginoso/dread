@@ -90,7 +90,7 @@ class BaseDispatcher(object):
         params.update(request.args)
 
         if endpoint.requires_auth:
-            endpoint = self.auth_class(endpoint)
+            endpoint = self.auth_class(endpoint, request)
 
         return endpoint(params)
 
@@ -115,14 +115,17 @@ class BaseDispatcher(object):
 
 
 class BaseAuth(object):
-    def __init__(self, endpoint):
+    unauthorized_exception = Unauthorized
+
+    def __init__(self, endpoint, request):
         self.endpoint = endpoint
+        self.request = request
 
     def __call__(self, params):
         if self.authenticate(params):
             return self.endpoint(params)
         else:
-            raise Unauthorized()
+            raise self.unauthorized_exception()
 
     def authenticate(self, params):
         raise NotImplementedError
