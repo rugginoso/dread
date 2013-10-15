@@ -48,6 +48,10 @@ class TestProtectedAction(unittest.TestCase):
         resp = self.client.get('/testresource/1?username=admin&password=admin')
         self.assertEqual(resp.status_code, 200)
 
+    def test_protected_action_wrong_auth(self):
+        resp = self.client.get('/testresource/1?username=foo&password=bar')
+        self.assertEqual(resp.status_code, 401)
+
     def test_unprotected_action(self):
         resp = self.client.get('/testresource/')
         self.assertEqual(resp.status_code, 200)
@@ -85,6 +89,14 @@ class TestBasicAuth(unittest.TestCase):
         resp = self.client.get('/testresource/1', headers=headers)
         self.assertEqual(resp.status_code, 200)
 
+    def test_protected_action_wrong_auth(self):
+        headers = [
+            ('Authorization', 'Basic %s' % standard_b64encode('foo:bar'))
+        ]
+
+        resp = self.client.get('/testresource/1', headers=headers)
+        self.assertEqual(resp.status_code, 401)
+
 
 class TestAuth(TokenAuth):
 
@@ -117,6 +129,14 @@ class TestTokenAuth(unittest.TestCase):
 
         resp = self.client.get('/testresource/1', headers=headers)
         self.assertEqual(resp.status_code, 200)
+
+    def test_protected_action_wrong_auth(self):
+        headers = [
+            ('Authorization', 'Token foobar')
+        ]
+
+        resp = self.client.get('/testresource/1', headers=headers)
+        self.assertEqual(resp.status_code, 401)
 
 
 if __name__ == '__main__':
