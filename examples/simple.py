@@ -8,6 +8,7 @@ from werkzeug.exceptions import NotFound
 
 
 class User(BaseResource):
+
     def __init__(self):
         self.users = []
         super(User, self).__init__(name="users", param_name="user_id")
@@ -40,7 +41,9 @@ class User(BaseResource):
         except IndexError:
             raise NotFound
 
+
 class Item(BaseResource):
+
     def __init__(self):
         super(Item, self).__init__(name='items', param_name='item_id')
 

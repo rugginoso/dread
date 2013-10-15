@@ -5,7 +5,9 @@ from .base import BaseAuth
 
 
 class BasicAuth(BaseAuth):
+
     class Unauthorized(Unauthorized):
+
         def __init__(self, *args, **kwargs):
             self.realm = kwargs.get('realm') or 'Authorization required'
             super(Unauthorized, self).__init__(*args, **kwargs)
@@ -24,7 +26,8 @@ class BasicAuth(BaseAuth):
             method, user_pass = auth_header.split()
             if method.lower() == 'basic':
                 try:
-                    username, password = standard_b64decode(user_pass).split(':')
+                    username, password = standard_b64decode(
+                        user_pass).split(':')
                     return self.check_credientials(username, password)
                 except ValueError:
                     return False

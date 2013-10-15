@@ -99,7 +99,10 @@ class BaseDispatcher(object):
         try:
             response = self.response_class(self.dispatch_request(request))
         except HTTPException as e:
-            response = self.response_class({'error': e.description}, e.code, headers=e.get_headers())
+            response = self.response_class(
+                {'error': e.description},
+                e.code,
+                headers=e.get_headers())
         return response(environ, start_response)
 
     def run(self, host='127.0.0.1', port=5000,

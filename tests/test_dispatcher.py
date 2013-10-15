@@ -7,6 +7,7 @@ from dread.base import BaseDispatcher, BaseResource
 
 
 class TestRuleGeneration(unittest.TestCase):
+
     def setUp(self):
         self.dispatcher = BaseDispatcher()
 
@@ -23,7 +24,6 @@ class TestRuleGeneration(unittest.TestCase):
 
         self.assertEqual(len(rules), 1)
         self.assertEqual(rules[0].endpoint, endpoint)
-
 
     def test_add_nested_resource(self):
         def endpoint(self, params):
@@ -44,7 +44,9 @@ class TestRuleGeneration(unittest.TestCase):
         rules = list(self.dispatcher.url_map.iter_rules(nested_endpoint))
 
         self.assertEqual(len(rules), 1)
-        self.assertEqual(rules[0].rule, '/resource/<int:resource_id>/nested_resource/<int:nested_resource_id>')
+        self.assertEqual(
+            rules[0].rule,
+            '/resource/<int:resource_id>/nested_resource/<int:nested_resource_id>')
 
     def test_add_nested_resource_without_details(self):
         def endpoint(self, params):
@@ -69,7 +71,9 @@ class TestDispatcher(BaseDispatcher):
     request_class = Request
     response_class = Response
 
+
 class TestResource(BaseResource):
+
     def __init__(self, testcase, *args, **kwargs):
         self.testcase = testcase
         super(TestResource, self).__init__(*args, **kwargs)
@@ -95,6 +99,7 @@ class TestResource(BaseResource):
 
 
 class TestParams(unittest.TestCase):
+
     def setUp(self):
         self.dispatcher = TestDispatcher()
 
@@ -107,7 +112,6 @@ class TestParams(unittest.TestCase):
         self.client = Client(self.dispatcher, Response)
 
         self.params = None
-
 
     def test_url_params(self):
         self.client.get('/resource/1/nested_resource/2')

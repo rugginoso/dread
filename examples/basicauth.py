@@ -47,6 +47,7 @@ class User(BaseResource):
 
 
 class Auth(BasicAuth):
+
     def check_credientials(self, username, password):
         return username == 'admin' and password == 'admin'
 

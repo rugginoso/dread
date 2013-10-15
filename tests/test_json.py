@@ -6,6 +6,7 @@ from dread.json import JSONRequest, JSONResponse
 
 
 class TestRequest(unittest.TestCase):
+
     def test_mimetype_fail(self):
         builder = EnvironBuilder(method='POST', data='{"foo": "bar"}')
         request = JSONRequest(builder.get_environ())
@@ -22,6 +23,7 @@ class TestRequest(unittest.TestCase):
 
 
 class TestResponse(unittest.TestCase):
+
     def test_mimetype(self):
         response = JSONResponse({})
 

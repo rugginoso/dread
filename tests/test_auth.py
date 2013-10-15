@@ -8,6 +8,7 @@ from dread.auth import BasicAuth
 
 
 class TestAuth(BaseAuth):
+
     def authenticate(self, params):
         return params.get('username') == ['admin'] and \
             params.get('password') == ['admin']
@@ -32,6 +33,7 @@ class TestResource(BaseResource):
 
 
 class TestProtectedAction(unittest.TestCase):
+
     def setUp(self):
         self.dispatcher = TestDispatcher()
         self.dispatcher.add_resource(TestResource())
@@ -52,6 +54,7 @@ class TestProtectedAction(unittest.TestCase):
 
 
 class TestAuth(BasicAuth):
+
     def check_credientials(self, username, password):
         return username == 'admin' and password == 'admin'
 
@@ -63,6 +66,7 @@ class BasicAuthDispatcher(BaseDispatcher):
 
 
 class TestBasicAuth(unittest.TestCase):
+
     def setUp(self):
         self.dispatcher = BasicAuthDispatcher()
         self.dispatcher.add_resource(TestResource())
