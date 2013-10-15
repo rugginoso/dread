@@ -4,7 +4,7 @@ from werkzeug.test import Client
 from werkzeug.wrappers import Request, Response
 
 from dread.base import BaseDispatcher, BaseResource, BaseAuth
-from dread.auth import BasicAuth
+from dread.auth import BasicAuth, TokenAuth
 
 
 class TestAuth(BaseAuth):
@@ -80,6 +80,39 @@ class TestBasicAuth(unittest.TestCase):
     def test_protected_action_authorized(self):
         headers = [
             ('Authorization', 'Basic %s' % standard_b64encode('admin:admin'))
+        ]
+
+        resp = self.client.get('/testresource/1', headers=headers)
+        self.assertEqual(resp.status_code, 200)
+
+
+class TestAuth(TokenAuth):
+
+    def check_token(self, token):
+        return token == 'testtoken'
+
+
+class TokenAuthDispatcher(BaseDispatcher):
+    request_class = Request
+    response_class = Response
+    auth_class = TestAuth
+
+
+class TestTokenAuth(unittest.TestCase):
+
+    def setUp(self):
+        self.dispatcher = TokenAuthDispatcher()
+        self.dispatcher.add_resource(TestResource())
+
+        self.client = Client(self.dispatcher, Response)
+
+    def test_protected_action_unauthorized(self):
+        resp = self.client.get('/testresource/1')
+        self.assertTrue('www-authenticate' in resp.headers)
+
+    def test_protected_action_authorized(self):
+        headers = [
+            ('Authorization', 'Token testtoken')
         ]
 
         resp = self.client.get('/testresource/1', headers=headers)
